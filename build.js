@@ -101,6 +101,16 @@ const PAGES = [
   { file: 'about.html',     key: 'about',     src: 'about' }
 ];
 
+/* ---------- 页面在 URL 上的位置 ----------
+   与 Cloudflare 静态资源的默认 HTML 处理保持一致：
+   它会把 /about.html 307 规范化成 /about（去掉扩展名）。
+   所以 canonical / og:url / sitemap 都要用无扩展名形式，
+   否则它们指向的是一个"会跳转"的地址，和实际地址对不上。
+   首页指向根目录。 */
+function urlPath(file) {
+  return file === 'index.html' ? '' : file.replace(/\.html$/, '');
+}
+
 /* ---------- 结构化数据（JSON-LD） ----------
    统一用 JSON.stringify 生成，而不是在 HTML 模板里手写 JSON ——
    这样文案里出现引号 / 换行也不会把 JSON 写坏。
@@ -108,8 +118,8 @@ const PAGES = [
 function ldFor(p) {
   const base = (data.site.domain || '').replace(/\/+$/, '');
   const seo = data[p.src].seo;
-  /* 首页指向根目录，其余指向具体文件 */
-  const pageUrl = base ? base + '/' + (p.file === 'index.html' ? '' : p.file) : '';
+  /* 首页指向根目录，其余指向无扩展名路径 */
+  const pageUrl = base ? base + '/' + urlPath(p.file) : '';
 
   const person = {
     '@type': 'Person',
@@ -248,8 +258,7 @@ for (const p of PAGES) {
   const ctx = Object.assign({}, data, {
     pageKey: p.key,
     pageFile: p.file,
-    /* 首页的规范网址指向根目录，其余页指向具体文件 */
-    pageUrlPath: p.file === 'index.html' ? '' : p.file,
+    pageUrlPath: urlPath(p.file),
     ldJson: ldFor(p),
     nav: nav,
     filters: filters,
@@ -292,7 +301,7 @@ if (data.site.domain) {
      若写成 /index.html，canonical 说的是 /，两处对不上，搜索引擎得额外判断一次，
      还有被当成两个页面的风险。 */
   const urls = PAGES.map(p =>
-    `  <url><loc>${robotsBase}/${p.file === 'index.html' ? '' : p.file}</loc></url>`).join('\n');
+    `  <url><loc>${robotsBase}/${urlPath(p.file)}</loc></url>`).join('\n');
   fs.writeFileSync(path.join(DIST, 'sitemap.xml'),
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`, 'utf8');
   console.log('  ✓ sitemap.xml');
@@ -303,7 +312,7 @@ if (data.site.domain) {
 /* 404 */
 if (fs.existsSync(path.join(TPL, '404.html'))) {
   const ctx = Object.assign({}, data, {
-    pageKey: '', pageFile: '404.html', pageUrlPath: '404.html',
+    pageKey: '', pageFile: '404.html', pageUrlPath: urlPath('404.html'),
     ldJson: ldFor({ file: '404.html', key: 'notfound', src: 'home' }),
     nav: data.nav, featuredWorks: [], seo: data.home.seo, year: new Date().getFullYear()
   });
