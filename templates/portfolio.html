@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="{{site.locale}}">
+<head>
+{{> head}}
+</head>
+<body>
+
+{{> nav}}
+
+<main>
+
+  <section class="page-head" data-tilt data-section="head">
+    <span class="field f2" aria-hidden="true"></span>
+    <div class="container">
+      <span class="eyebrow" data-reveal>{{portfolio.head.eyebrow}}</span>
+      <h1 class="h1" data-reveal>
+        {{#each portfolio.head.title}}<span class="plate" style="--r:{{item.rotate}};--pc:var(--{{item.bg}});--ps:var(--{{item.shadow}});--tz:{{item.z}}">{{item.text}}</span>
+        {{/each}}
+      </h1>
+      <p class="lead" data-reveal style="margin-top:26px">{{portfolio.head.lead}}</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:clamp(28px,4vw,48px)" data-section="gallery">
+    <div class="container">
+      <div class="filters" data-reveal>
+        {{#each filters}}<button data-filter="{{item.filter}}"{{#if item.active}} class="active" aria-pressed="true"{{/if}}{{#if item.active}}{{else}} aria-pressed="false"{{/if}}>{{item.label}}</button>
+        {{/each}}
+      </div>
+
+      <div class="gallery">
+        {{#each works}}
+        <div class="item" data-cat="{{item.cat}}" data-cap="{{item.title}} · {{item.en}} · {{item.year}}"
+             role="button" tabindex="0" aria-label="查看大图：{{item.title}}"
+             style="--ar:{{item.ratio}};--rz:{{item.rotate}}" data-reveal>
+          <div class="paper-card">
+            <picture><source srcset="{{item.img}}.webp" type="image/webp"><img src="{{item.img}}.jpg" alt="{{item.alt}}" loading="lazy"></picture>
+          </div>
+          <div class="meta"><span class="no">Fig.{{item.id}} · {{item.catLabel}}</span><span class="t">{{item.title}}</span><span class="d">{{item.year}} · Digital</span></div>
+        </div>
+        {{/each}}
+      </div>
+
+      <div class="section-foot" data-reveal>
+        <p class="handline">{{portfolio.foot.handline}}</p>
+        <p class="lead" style="margin:10px auto 0;font-size:.86rem">{{portfolio.foot.text}}</p>
+        <div style="margin-top:30px">
+          <a class="btn btn--{{portfolio.foot.action.style}}" href="{{portfolio.foot.action.href}}"{{#if portfolio.foot.action.track}} data-track="{{portfolio.foot.action.track}}"{{/if}}>{{portfolio.foot.action.label}} <span class="arw">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{{> footer}}
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="作品大图">
+  <button class="close" aria-label="关闭">&times;</button>
+  <button class="prev" aria-label="上一张">←</button>
+  <!-- 不加 src="" —— 空 src 会让部分浏览器把当前页面当成图片再请求一次；由 JS 在打开时写入 -->
+  <img alt="">
+  <button class="next" aria-label="下一张">→</button>
+  <div class="cap"></div>
+</div>
+
+<script src="assets/js/analytics.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

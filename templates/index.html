@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="{{site.locale}}">
+<head>
+{{> head}}
+</head>
+<body>
+
+{{> nav}}
+
+<main>
+
+  <!-- ============ 首屏 ============ -->
+  <section class="hero" data-tilt data-section="hero">
+    <span class="field f1" aria-hidden="true"></span>
+    <span class="field f2" aria-hidden="true"></span>
+    <div class="hero-idx">{{home.hero.idx}}</div>
+
+    <!-- 文案拆成"标题段"和"正文段"，作品图夹在中间：
+         桌面端用 grid 显式定位拼回原来的两栏；移动端自然堆叠成
+         「标题 → 作品 → 正文」，作品图不会像以前那样被挤到折叠线以下。 -->
+    <div class="container hero-grid">
+      <div class="hero-copy--head">
+        <div class="tags" data-reveal>
+          {{#each home.hero.tags}}<span{{#if item.color}} class="{{item.color}}"{{/if}}>{{item.text}}</span>
+          {{/each}}
+        </div>
+
+        <h1 class="display hero-title" data-reveal>
+          {{#each home.hero.title}}<span class="plate" style="--r:{{item.rotate}};--pc:var(--{{item.bg}});--ps:var(--{{item.shadow}});--tz:{{item.z}}">{{item.text}}</span>
+          {{/each}}
+        </h1>
+      </div>
+
+      <div class="hero-visual-wrap" data-reveal>
+        <div class="hero-visual" style="--art:url(/{{stack.0.img}}.webp)">
+          <span class="hv-mat" aria-hidden="true"></span>
+          <figure class="hv-frame">
+            <picture><source srcset="{{stack.0.img}}.webp" type="image/webp"><img src="{{stack.0.img}}.jpg" alt="{{stack.0.alt}}" loading="eager"></picture>
+          </figure>
+          <span class="hv-caption" aria-hidden="true">01 / {{stack.0.alt}}</span>
+        </div>
+      </div>
+
+      <div class="hero-copy--body">
+        <p class="handline" data-reveal style="margin-top:26px">{{home.hero.handline}}</p>
+        <p class="lead" data-reveal style="margin-top:18px">{{home.hero.lead}}</p>
+
+        <div class="tags" data-reveal style="margin-top:26px">
+          {{#each home.hero.chips}}<span{{#if item.color}} class="{{item.color}}"{{/if}}>{{item.text}}</span>
+          {{/each}}
+        </div>
+
+        <div class="hero-actions" data-reveal>
+          {{#each home.hero.actions}}
+          {{#if item.href}}<a class="btn btn--{{item.style}}" href="{{item.href}}"{{#if item.track}} data-track="{{item.track}}"{{/if}}>{{item.label}} <span class="arw">→</span></a>{{/if}}
+          {{#if item.wechat}}<button type="button" class="btn btn--{{item.style}}" data-wechat{{#if item.track}} data-track="{{item.track}}"{{/if}}>{{item.label}}</button>{{/if}}
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 数字 ============ -->
+  <section class="stats" data-section="stats">
+    <div class="container">
+      <div class="stats-grid" data-reveal>
+        {{#each home.stats.items}}
+        <div class="stat">
+          <div class="num"><span data-count="{{item.value}}"{{#if item.suffix}} data-suffix="{{item.suffix}}"{{/if}}>0</span>{{#if item.unit}}<i>{{item.unit}}</i>{{/if}}</div>
+          <div class="lbl">{{item.label}}</div>
+        </div>
+        {{/each}}
+      </div>
+      {{#if home.stats.note}}<p class="mono" style="text-align:center;margin-top:26px;color:var(--ink-3)">{{home.stats.note}}</p>{{/if}}
+    </div>
+  </section>
+
+  <!-- ============ 精选作品（取自 works 里 featured: true 的条目） ============
+       胶片长廊：形式改编自 ThreeUI CharacterCarousel（filmstrip 变体）。
+       卡片是实实在在的 HTML，JS 只负责 3D 排位 —— 脚本没跑起来时，
+       这里退回成一条可以横向滑动的纸片长条，作品照样看得见。
+       长廊刻意放在 .container 外面，好让整条带子铺满视口宽度。 -->
+  <section class="section" data-section="works">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">{{home.worksSection.eyebrow}}</span>
+        <h2 class="h1">{{home.worksSection.title}}</h2>
+        <p class="lead">{{home.worksSection.text}}</p>
+      </div>
+    </div>
+
+    <div class="filmstrip-stage" data-filmstrip data-filmstrip-wheel="0" role="group"
+         aria-roledescription="作品长廊" aria-label="精选作品">
+      <p class="sr-only">按左右方向键浏览，回车打开作品集。把指针移到长廊上，整条带子会跟着散开。</p>
+      <!-- 卡里只有作品本身：没有信息条、没有卡纸、不裁不垫。
+           标题只留给读屏（aria-label），画面上不压字。
+           width/height 由构建时读 PNG 真实像素填进来，图片到达前就按比例占好位。 -->
+      <div class="filmstrip-deck">
+        {{#each filmstrip}}
+        <a class="fc-card" href="portfolio.html" aria-label="{{item.title}} · {{item.en}} · {{item.year}}">
+          <span class="fc-portrait">
+            <picture><source srcset="{{item.img}}.webp" type="image/webp"><img src="{{item.img}}.jpg" alt="{{item.alt}}"{{#if item.w}} width="{{item.w}}" height="{{item.h}}"{{/if}} loading="{{item.loading}}"></picture>
+          </span>
+        </a>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="section-foot" data-reveal>
+        <a class="link" href="portfolio.html">{{home.worksSection.moreLabel}} <span class="arw">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 学员声音 ============ -->
+  <section class="section" data-section="voices">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">{{home.voices.eyebrow}}</span>
+        <h2 class="h1">{{home.voices.title}}</h2>
+        <p class="lead">{{home.voices.text}}</p>
+      </div>
+
+      <div class="testi-grid">
+        {{#each home.voices.items}}
+        <div class="testi-card" data-reveal>
+          {{#if item.placeholder}}<span class="tag-sample">示例占位</span>{{/if}}
+          <span class="mk">“</span>
+          <p class="quote">{{item.quote}}</p>
+          <div class="who"><span class="avatar">{{item.initial}}</span><div><div class="name">{{item.name}}</div><div class="from">{{item.batch}}</div></div></div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 课程引导 ============ -->
+  <section class="band" data-section="course-band">
+    <div class="container band-inner">
+      <span class="eyebrow" data-reveal>{{home.band.eyebrow}}</span>
+      <h2 class="h2" data-reveal>{{home.band.title}}</h2>
+      <p data-reveal>{{home.band.text}}</p>
+      <div class="band-actions" data-reveal>
+        {{#each home.band.actions}}
+        {{#if item.href}}<a class="btn btn--{{item.style}}" href="{{item.href}}"{{#if item.track}} data-track="{{item.track}}"{{/if}}>{{item.label}} <span class="arw">→</span></a>{{/if}}
+        {{#if item.wechat}}<button type="button" class="btn btn--{{item.style}}" data-wechat{{#if item.track}} data-track="{{item.track}}"{{/if}}>{{item.label}}</button>{{/if}}
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{{> footer}}
+
+<script src="assets/js/analytics.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/filmstrip.js"></script>
+<script src="assets/js/planes.js"></script>
+</body>
+</html>

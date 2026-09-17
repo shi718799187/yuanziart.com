@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>实验 · 作品胶片长廊</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%235FCBF2'/%3E%3Ccircle cx='50' cy='46' r='24' fill='%232A1F16'/%3E%3Crect x='42' y='70' width='16' height='18' rx='5' fill='%232A1F16'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+  /* 只有实验页需要的壳：顶栏 + 让长廊吃满剩余高度 */
+  html,body{height:100%}
+  body{display:flex;flex-direction:column;height:100dvh;overflow:hidden;background:var(--paper)}
+
+  .lab-bar{
+    flex:none;display:flex;align-items:center;gap:clamp(10px,1.4vw,20px);flex-wrap:wrap;
+    padding:11px clamp(14px,3vw,30px);
+    border-bottom:1.5px solid var(--ink);background:var(--frame);
+    font-family:var(--font-mono);font-size:var(--fs-micro);letter-spacing:.14em;
+  }
+  .lab-back{color:var(--ink);border-bottom:1.5px solid transparent}
+  .lab-back:hover{border-bottom-color:var(--ink)}
+  .lab-title{font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+  .lab-ctl{display:flex;align-items:center;gap:9px;color:var(--ink-2);cursor:pointer}
+  .lab-ctl input[type=range]{width:clamp(78px,10vw,130px);accent-color:var(--c1-ink)}
+  .lab-ctl output{color:var(--ink);min-width:3.4em;text-align:right;font-variant-numeric:tabular-nums}
+  .lab-seg{display:flex;gap:0;border:1.5px solid var(--line);border-radius:3px 10px 4px 12px;overflow:hidden}
+  .lab-seg a{padding:6px 13px;color:var(--ink-2);border-right:1.5px solid var(--line)}
+  .lab-seg a:last-child{border-right:0}
+  .lab-seg a.on{background:var(--ink);color:var(--paper)}
+  .lab-note{color:var(--ink-3);margin-left:auto}
+
+  main.filmstrip-stage{flex:1;height:auto;min-height:0;margin-block:0}
+  @media (max-width:1180px){.lab-note{display:none}}
+</style>
+</head>
+<body>
+
+<header class="lab-bar">
+  <a class="lab-back" href="../index.html">← 返回首页</a>
+  <span class="lab-title">实验 · 作品胶片长廊</span>
+  <label class="lab-ctl">速度 <input type="range" id="speed" min="0" max="2.5" step="0.05" value="1" aria-label="动画速度"><output id="speedOut">1.00</output></label>
+  <label class="lab-ctl">缩放 <input type="range" id="scale" min="0.7" max="1.3" step="0.01" value="1" aria-label="整体缩放"><output id="scaleOut">1.00</output></label>
+  <span class="lab-seg" id="deckSwitch"></span>
+  <span class="lab-note">移动指针散开长廊 · 点侧面卡归位 · 点正中卡打开作品集 · ←→ 切换 · 滚轮切一张</span>
+</header>
+
+<main class="filmstrip-stage" data-filmstrip data-filmstrip-wheel="1" data-speed="1" data-scale="1"
+      role="group" aria-roledescription="作品长廊" aria-label="作品胶片长廊">
+  <p class="sr-only">按左右方向键浏览，回车打开作品集。把指针移到长廊上，整条带子会跟着散开。</p>
+  <div class="filmstrip-deck" id="deck"></div>
+</main>
+
+<script>
+/* 实验页的数据直接对齐 content/site-data.js：
+   默认走 featured（和首页一致），?deck=all 可以看全部作品 ——
+   后期作品变多以后，先在实验室里看"数量上去之后是什么样"。 */
+(function () {
+  "use strict";
+  /* 手抄自 content/site-data.js 的 works 数组 —— 这份副本必须跟着一起改，
+     否则实验室里看到的标题会和正式页面脱节（换真实作品时就踩过一次）。 */
+  var ALL = [
+    { id: '01', title: '云端赏月',     en: 'Cloud Gazing',         year: '2026', alt: '女孩坐在云朵上望着月亮',             img: 'work-01', featured: true },
+    { id: '02', title: '荷叶上的雨',   en: 'Rain on the Lotus',    year: '2026', alt: '女孩举着荷叶在雨中与青蛙同行',       img: 'work-02', featured: true },
+    { id: '03', title: '许愿树',       en: 'Wishing Tree',         year: '2026', alt: '星空下的许愿树与树下的小狐狸',       img: 'work-03', featured: true },
+    { id: '04', title: '夜读',         en: 'Night Reading',        year: '2025', alt: '深夜灯下读书的女孩和探头张望的小怪兽', img: 'work-04', featured: false },
+    { id: '05', title: '敲门的万圣夜', en: 'Trick or Treat',       year: '2025', alt: '女巫打开门，门外飘着幽灵与南瓜花环', img: 'work-05', featured: true },
+    { id: '06', title: '夏日午后',     en: 'Summer',               year: '2026', alt: '夏天树荫下和猫待在一起的女孩',       img: 'work-06', featured: true },
+    { id: '07', title: '雪天长椅',     en: 'A Snowy Day',          year: '2025', alt: '下雪天长椅上抱着小熊的女孩',         img: 'work-07', featured: true },
+    { id: '08', title: '小怪兽夜市',   en: 'Monster Night Market', year: '2026', alt: '挂满灯笼的夜市里忙碌的小怪兽',       img: 'work-08', featured: false }
+  ];
+
+  var useAll = /(^|[?&])deck=all(&|$)/.test(location.search);
+  var list = useAll ? ALL : ALL.filter(function (w) { return w.featured; });
+
+  /* 与 build.js 的 filmstripDeck 同一套规则：补到整轮循环、至少 9 个卡位 */
+  var MIN = 9;
+  var count = Math.ceil(MIN / list.length) * list.length;
+  var deck = [];
+  for (var i = 0; i < count; i++) deck.push(list[i % list.length]);
+
+  var host = document.getElementById('deck');
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+
+  host.innerHTML = deck.map(function (w, i) {
+    return '<a class="fc-card" href="../portfolio.html"' +
+      ' aria-label="' + esc(w.title) + ' · ' + esc(w.en) + ' · ' + w.year + '">' +
+      '<span class="fc-portrait"><picture>' +
+      '<source srcset="../assets/images/' + w.img + '.webp" type="image/webp">' +
+      '<img src="../assets/images/' + w.img + '.jpg" alt="' + esc(w.alt) + '"' +
+      (i === 0 ? ' loading="eager"' : ' loading="lazy"') + '></picture></span></a>';
+  }).join('');
+
+  document.getElementById('deckSwitch').innerHTML =
+    '<a href="?deck=featured" class="' + (useAll ? '' : 'on') + '">仅精选 ' + ALL.filter(function (w) { return w.featured; }).length + '</a>' +
+    '<a href="?deck=all" class="' + (useAll ? 'on' : '') + '">全部 ' + ALL.length + '</a>';
+})();
+</script>
+
+<script src="../assets/js/filmstrip.js"></script>
+
+<script>
+/* 两个滑块直接改 data-* 属性 —— filmstrip.js 每帧现读，所以是实时的 */
+(function () {
+  "use strict";
+  var stage = document.querySelector('[data-filmstrip]');
+  if (!stage) return;
+  [['speed', 'speedOut'], ['scale', 'scaleOut']].forEach(function (pair) {
+    var input = document.getElementById(pair[0]);
+    var out = document.getElementById(pair[1]);
+    var apply = function () {
+      stage.setAttribute('data-' + pair[0], input.value);
+      out.textContent = Number(input.value).toFixed(2);
+    };
+    input.addEventListener('input', apply);
+    apply();
+  });
+})();
+</script>
+
+</body>
+</html>

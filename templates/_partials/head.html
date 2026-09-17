@@ -1,0 +1,37 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 必须放在样式表之前：给 <html> 打 js 标记。
+     入场动画的"隐藏态"只在有 .js 时生效 —— 这样 JS 被拦截或脚本报错时，
+     内容不会停在 opacity:0 变成一整页空白。 -->
+<script>document.documentElement.className+=" js";</script>
+<title>{{seo.title}}</title>
+<meta name="description" content="{{seo.desc}}">
+<meta name="theme-color" content="#FFFDF7">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{site.name}} · {{site.role}}">
+<meta property="og:title" content="{{seo.title}}">
+<meta property="og:description" content="{{seo.desc}}">
+<meta property="og:locale" content="{{site.locale}}">
+{{#if site.domain}}<meta property="og:url" content="{{site.domain}}/{{pageUrlPath}}">
+<link rel="canonical" href="{{site.domain}}/{{pageUrlPath}}">{{/if}}
+{{#if site.ogImage}}<meta property="og:image" content="{{#if site.domain}}{{site.domain}}/{{/if}}{{site.ogImage}}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{seo.title}}">
+<meta name="twitter:description" content="{{seo.desc}}">
+<meta name="twitter:image" content="{{#if site.domain}}{{site.domain}}/{{/if}}{{site.ogImage}}">{{/if}}
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%235FCBF2'/%3E%3Ccircle cx='50' cy='46' r='24' fill='%232A1F16'/%3E%3Crect x='42' y='70' width='16' height='18' rx='5' fill='%232A1F16'/%3E%3C/svg%3E">
+<!-- 字体已自托管，不再请求 fonts.googleapis.com。
+     原因：① 大陆访问 fonts.googleapis.com / gstatic.com 不稳定，用户实际看到的是
+             苹方/雅黑回落版，和设计稿不是一套字；
+           ② 这几个字族都是 CJK，Google 在线引用会切成上百个 unicode-range 分片，
+             首屏要发几十个请求。
+     现在只加载 7 个 woff2（共约 660KB），且都是"只含本站实际用字"的子集。
+     文件与 fonts.css 由 build-fonts.js 生成 —— 改完文案后重跑 `node build-fonts.js`。
+     漏掉的字不会变方块，只是退回系统字体（--font-* 里的后备栈）。 -->
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/noto-sans-sc-400.woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+{{#if site.analytics.domain}}<script defer data-domain="{{site.analytics.domain}}" src="https://plausible.io/js/script.js"></script>
+{{/if}}
+<!-- 结构化数据：由 build.js 用 JSON.stringify 生成，文案里出现引号也不会把 JSON 写坏 -->
+<script type="application/ld+json">{{ldJson}}</script>

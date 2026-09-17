@@ -1,0 +1,30 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><span class="brand-mark">{{site.name}}</span><small>{{site.nameEn}} · {{site.role}}</small></div>
+        <p class="lead" style="margin-top:18px;font-size:.86rem;max-width:24em">{{footer.blurb}}</p>
+      </div>
+      {{#each footer.columns}}
+      <div class="footer-col">
+        <h4>{{item.title}}</h4>
+        <ul>
+          {{#each item.items}}
+          <li>
+            {{#if item.href}}<a href="{{item.href}}">{{item.label}}</a>{{/if}}
+            {{#if item.mailto}}<a href="mailto:{{contact.email}}" data-email="{{contact.email}}">{{item.label}}{{contact.email}}</a>{{/if}}
+            {{#if item.wechat}}<button type="button" data-wechat data-wechat-id="{{contact.wechatId}}" style="font:inherit;color:inherit;padding:0">{{item.label}}{{contact.wechatId}}</button>{{/if}}
+            {{#if item.platform}}<span data-platform data-platform-name="{{contact.platform.name}}">{{item.label}}{{contact.platform.name}}</span>{{/if}}
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/each}}
+    </div>
+    <div class="footer-bottom">
+      <span>© {{year}} {{site.name}} · 保留所有权利</span>
+      {{#each footer.bottom}}<span>{{item}}</span>
+      {{/each}}
+    </div>
+  </div>
+</footer>

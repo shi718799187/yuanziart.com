@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="{{site.locale}}">
+<head>
+{{> head}}
+</head>
+<body>
+
+{{> nav}}
+
+<main>
+
+  <section class="page-head" data-tilt data-section="head">
+    <span class="field f2" aria-hidden="true"></span>
+    <div class="container">
+      <span class="eyebrow" data-reveal>{{about.head.eyebrow}}</span>
+      <h1 class="h1" data-reveal>
+        {{#each about.head.title}}<span class="plate" style="--r:{{item.rotate}};--pc:var(--{{item.bg}});--ps:var(--{{item.shadow}});--tz:{{item.z}}">{{item.text}}</span>
+        {{/each}}
+      </h1>
+      <p class="lead" data-reveal style="margin-top:26px">{{about.head.lead}}</p>
+    </div>
+  </section>
+
+  <!-- ============ 个人介绍 ============ -->
+  <section class="section" style="padding-top:clamp(20px,3vw,36px)" data-section="intro">
+    <div class="container about-intro">
+      <figure class="holder" data-reveal="l">
+        {{#if about.intro.img}}<picture><source srcset="{{about.intro.img}}.webp" type="image/webp"><img src="{{about.intro.img}}.jpg" alt="{{about.intro.imgAlt}}" loading="lazy"></picture>{{/if}}
+      </figure>
+      <div data-reveal="r">
+        <span class="eyebrow">Hello</span>
+        {{#each about.intro.paragraphs}}<p class="lead" style="margin-top:16px">{{item}}</p>
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 教学理念 ============ -->
+  <section class="section" style="padding-top:0" data-section="philosophy">
+    <div class="container container--narrow">
+      <div data-reveal>
+        <span class="eyebrow" style="justify-content:center">{{about.philosophy.eyebrow}}</span>
+        <p class="philosophy" style="margin-top:26px">{{about.philosophy.text}}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 时间线 ============ -->
+  <section class="section" style="padding-top:clamp(20px,3vw,40px)" data-section="journey">
+    <div class="container container--narrow">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">{{about.journey.eyebrow}}</span>
+        <h2 class="h2">{{about.journey.title}}</h2>
+        {{#if about.journey.note}}<p class="lead">{{about.journey.note}}</p>{{/if}}
+      </div>
+      <div class="timeline" data-reveal>
+        {{#each about.journey.items}}<div class="tl-item"><div class="yr">{{item.yr}}</div><div class="tx">{{item.tx}}</div></div>
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 数字 ============ -->
+  <section class="stats" data-section="stats">
+    <div class="container">
+      <div class="stats-grid" data-reveal>
+        {{#each home.stats.items}}
+        <div class="stat">
+          <div class="num"><span data-count="{{item.value}}"{{#if item.suffix}} data-suffix="{{item.suffix}}"{{/if}}>0</span>{{#if item.unit}}<i>{{item.unit}}</i>{{/if}}</div>
+          <div class="lbl">{{item.label}}</div>
+        </div>
+        {{/each}}
+      </div>
+      {{#if about.statsNote}}<p class="mono" style="text-align:center;margin-top:26px;color:var(--ink-3)">{{about.statsNote}}</p>{{/if}}
+    </div>
+  </section>
+
+  <section class="band" data-section="band">
+    <div class="container band-inner">
+      <span class="eyebrow" data-reveal>{{about.band.eyebrow}}</span>
+      <h2 class="h2" data-reveal>{{about.band.title}}</h2>
+      <div class="band-actions" data-reveal>
+        {{#each about.band.actions}}
+        {{#if item.href}}<a class="btn btn--{{item.style}}" href="{{item.href}}"{{#if item.track}} data-track="{{item.track}}"{{/if}}>{{item.label}} <span class="arw">→</span></a>{{/if}}
+        {{#if item.wechat}}<button type="button" class="btn btn--{{item.style}}" data-wechat{{#if item.track}} data-track="{{item.track}}"{{/if}}>{{item.label}}</button>{{/if}}
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{{> footer}}
+
+<script src="assets/js/analytics.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

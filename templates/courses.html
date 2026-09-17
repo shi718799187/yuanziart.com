@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="{{site.locale}}">
+<head>
+{{> head}}
+</head>
+<body>
+
+{{> nav}}
+
+<main>
+
+  <!-- ============ 课程头 ============ -->
+  <section class="page-head" data-tilt data-section="hero">
+    <span class="field f1" aria-hidden="true"></span>
+    <div class="container container--narrow">
+      <span class="eyebrow" data-reveal>{{course.head.eyebrow}}</span>
+      <h1 class="h1" data-reveal>
+        {{#each course.head.title}}<span class="plate" style="--r:{{item.rotate}};--pc:var(--{{item.bg}});--ps:var(--{{item.shadow}});--tz:{{item.z}}">{{item.text}}</span>
+        {{/each}}
+      </h1>
+      <p class="lead" data-reveal style="margin-top:28px">{{course.head.lead}}</p>
+
+      <div class="meta-row" data-reveal>
+        {{#each course.head.chips}}<span class="chip">{{item}}</span>
+        {{/each}}
+      </div>
+
+      <div class="price-line" data-reveal>
+        <span class="num">{{course.head.price}}</span>
+        <span class="note">{{course.head.priceNote}}</span>
+      </div>
+
+      <div class="hero-actions" data-reveal>
+        {{#each course.head.actions}}
+        {{#if item.href}}<a class="btn btn--{{item.style}}" href="{{item.href}}"{{#if item.track}} data-track="{{item.track}}"{{/if}}>{{item.label}} <span class="arw">→</span></a>{{/if}}
+        {{#if item.wechat}}<button type="button" class="btn btn--{{item.style}}" data-wechat{{#if item.track}} data-track="{{item.track}}"{{/if}}>{{item.label}}</button>{{/if}}
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 课程主体 ============ -->
+  <section class="section" style="padding-top:clamp(24px,4vw,48px)">
+    <div class="container course-grid">
+
+      <div>
+        <!-- 适合人群 -->
+        <div class="section-head" data-reveal data-section="who">
+          <span class="eyebrow">{{course.audience.eyebrow}}</span>
+          <h2 class="h2">{{course.audience.title}}</h2>
+        </div>
+        <ul class="ol" data-reveal>
+          {{#each course.audience.items}}<li><div class="tt">{{item.t}}</div><div class="dd">{{item.d}}</div></li>
+          {{/each}}
+        </ul>
+
+        <!-- 课程大纲 -->
+        <div class="section-head" data-reveal style="margin-top:clamp(56px,8vw,96px)" data-section="curriculum">
+          <span class="eyebrow">{{course.curriculum.eyebrow}}</span>
+          <h2 class="h2">{{course.curriculum.title}}</h2>
+        </div>
+        <ol class="ol" data-reveal>
+          {{#each course.curriculum.items}}<li><div class="tt">{{item.t}}</div><div class="dd">{{item.d}}</div></li>
+          {{/each}}
+        </ol>
+
+        <!-- 学习方式 -->
+        <div class="section-head" data-reveal style="margin-top:clamp(56px,8vw,96px)" data-section="how">
+          <span class="eyebrow">{{course.howItWorks.eyebrow}}</span>
+          <h2 class="h2">{{course.howItWorks.title}}</h2>
+        </div>
+        <div class="info-grid" data-reveal>
+          {{#each course.howItWorks.items}}<div class="info-cell"><div class="k">{{item.k}}</div><div class="v">{{item.v}}</div></div>
+          {{/each}}
+        </div>
+
+        <!-- FAQ -->
+        <div class="section-head" data-reveal style="margin-top:clamp(56px,8vw,96px)" id="faq" data-section="faq">
+          <span class="eyebrow">{{course.faq.eyebrow}}</span>
+          <h2 class="h2">{{course.faq.title}}</h2>
+        </div>
+        <div class="faq" data-reveal>
+          {{#each course.faq.items}}
+          <div class="faq-item">
+            <button class="faq-q" type="button">{{item.q}}<span class="ic"></span></button>
+            <div class="faq-a"><div class="faq-a-inner">{{item.a}}</div></div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+
+      <aside class="course-side">
+        <div class="apply-card" id="apply" data-reveal data-section="apply">
+          <span class="eyebrow">{{course.apply.eyebrow}}</span>
+          <h3>{{course.apply.title}}</h3>
+          <p>{{course.apply.text}}</p>
+          <button type="button" class="btn btn--{{course.apply.button.style}} btn--block" data-wechat{{#if course.apply.button.track}} data-track="{{course.apply.button.track}}"{{/if}}>{{course.apply.button.label}}</button>
+          <p class="mono" style="margin:16px 0 0;color:rgba(255,253,247,.55);text-align:center">微信号：{{contact.wechatId}}</p>
+        </div>
+
+        {{#if course.sideQuote}}
+        <div class="testi-card" data-reveal>
+          {{#if course.sideQuote.placeholder}}<span class="tag-sample">示例占位</span>{{/if}}
+          <span class="mk">“</span>
+          <p class="quote">{{course.sideQuote.quote}}</p>
+          <div class="who"><span class="avatar">{{course.sideQuote.initial}}</span><div><div class="name">{{course.sideQuote.name}}</div><div class="from">{{course.sideQuote.batch}}</div></div></div>
+        </div>
+        {{/if}}
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- ============ 试听 ============ -->
+  <section class="band" data-section="trial">
+    <div class="container band-inner">
+      <span class="eyebrow" data-reveal>{{course.trial.eyebrow}}</span>
+      <h2 class="h2" data-reveal>{{course.trial.title}}</h2>
+      <p data-reveal>{{course.trial.text}}</p>
+      <div class="band-actions" data-reveal>
+        {{#each course.trial.actions}}
+        {{#if item.href}}<a class="btn btn--{{item.style}}" href="{{item.href}}"{{#if item.track}} data-track="{{item.track}}"{{/if}}>{{item.label}}</a>{{/if}}
+        {{#if item.wechat}}<button type="button" class="btn btn--{{item.style}}" data-wechat{{#if item.track}} data-track="{{item.track}}"{{/if}}>{{item.label}} <span class="arw">→</span></button>{{/if}}
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{{> footer}}
+
+<script src="assets/js/analytics.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

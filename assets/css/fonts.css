@@ -1,0 +1,56 @@
+/* ============================================================
+   自托管字体 —— 由 build-fonts.js 生成，请勿手改
+   ------------------------------------------------------------
+   每个文件都是只含本站实际用字的子集（text= 子集），
+   所以体积远小于完整字族，也不需要发几十个 unicode-range 分片请求。
+   改了文案后重跑： node build-fonts.js
+   ============================================================ */
+@font-face{
+  font-family:'Noto Sans SC';
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:url('../fonts/noto-sans-sc-400.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Noto Sans SC';
+  font-style:normal;
+  font-weight:700;
+  font-display:swap;
+  src:url('../fonts/noto-sans-sc-700.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Noto Sans SC';
+  font-style:normal;
+  font-weight:900;
+  font-display:swap;
+  src:url('../fonts/noto-sans-sc-900.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Noto Serif SC';
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:url('../fonts/noto-serif-sc-400.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Noto Serif SC';
+  font-style:normal;
+  font-weight:500;
+  font-display:swap;
+  src:url('../fonts/noto-serif-sc-500.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Ma Shan Zheng';
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:url('../fonts/ma-shan-zheng-400.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Space Mono';
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:url('../fonts/space-mono-400.woff2') format('woff2');
+}

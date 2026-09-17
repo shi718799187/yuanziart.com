@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{site.locale}}">
+<head>
+{{> head}}
+<style>
+  .nf{padding:calc(82px + 12vh) 0;min-height:72vh;text-align:center}
+  .nf .h1{margin-top:18px}
+  .nf .handline{margin-top:18px}
+  .nf .btns{margin-top:42px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+{{> nav}}
+
+<main class="nf">
+  <div class="container">
+    <span class="eyebrow" style="justify-content:center">Error 404</span>
+    <h1 class="h1">这一页走丢了</h1>
+    <p class="handline">可能它去童话里的某个角落了。</p>
+    <div class="btns">
+      <a class="btn btn--solid" href="index.html">回到首页 <span class="arw">→</span></a>
+      <a class="btn btn--outline" href="portfolio.html">看看作品</a>
+    </div>
+  </div>
+</main>
+
+{{> footer}}
+
+<script src="assets/js/analytics.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
